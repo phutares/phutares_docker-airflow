@@ -3,6 +3,7 @@ from airflow import DAG
 from airflow.operators.bash_operator import BashOperator
 from airflow.operators.python_operator import PythonOperator
 from datetime import datetime, timedelta
+import pytz
 from airflow.hooks.mysql_hook import MySqlHook
 from airflow.operators.mysql_operator import MySqlOperator
 import pandas as pd
@@ -36,7 +37,7 @@ with DAG('daily_oil_price', schedule_interval="@once", default_args=default_args
         return allOilPriceData
 
     def get_data(**kwargs):
-        now = datetime.now()
+        now = datetime.now(pytz.utc)
         allData = []
         print("Year:",now.year)
         print("- Month:",now.month)
@@ -65,7 +66,7 @@ with DAG('daily_oil_price', schedule_interval="@once", default_args=default_args
         return results
 
     def store_data(**kwargs):
-        createdDate = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+        createdDate = datetime.now(pytz.utc).strftime("%Y/%m/%d %H:%M:%S")
         res = get_data()
         table_status = check_table_exists()
         mysql_hook = MySqlHook(mysql_conn_id='mysql_test_conn', schema='testdb')
