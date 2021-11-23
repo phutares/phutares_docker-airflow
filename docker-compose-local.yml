@@ -1,0 +1,25 @@
+version: "3.9"
+services:
+  airflow:
+    build: ./airflow
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
+      - ./plugins:/opt/airflow/plugins
+    ports:
+      - 8080:8080
+    command: bash -c "airflow webserver --port 8080 & airflow scheduler"
+    
+  mysql:
+    image: mysql/mysql-server:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: testdb
+      MYSQL_USER: testdb
+      MYSQL_PASSWORD: testdb
+    ports:
+      - 3306:3306
+
+networks:
+  backend:
+    driver: "bridge"
