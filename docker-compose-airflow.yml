@@ -88,8 +88,8 @@ services:
     image: mysql/mysql-server:5.7
     environment:
       MYSQL_DATABASE: testdb
-      MYSQL_USER: testdb
-      MYSQL_PASSWORD: testdb
+      MYSQL_USER: airflow
+      MYSQL_PASSWORD: airflow
       MYSQL_ROOT_PASSWORD: password
     volumes:
       - mysql-db-volume:/var/lib/mysql/data
