@@ -6,15 +6,15 @@ ENV AIRFLOW_HOME=/opt/airflow
 ENV AIRFLOW__CORE__LOAD_EXAMPLES=False
 
 RUN pip3 install apache-airflow==2.2.1 --constraint https://raw.githubusercontent.com/apache/airflow/constraints-2.2.1/constraints-3.8.txt
-RUN pip3 install pandas beautifulsoup4 sklearn requests pytz
+RUN pip3 install pandas beautifulsoup4 sklearn requests DateTime pytz json
 RUN pip3 install apache-airflow-providers-mysql==2.1.1
 
 
 RUN airflow db init
 RUN airflow users create \
-    --username admin \
-    --password password \
-    --firstname Peter \
-    --lastname Parker \
+    --username airflow \
+    --password airflow \
+    --firstname Phutares \
+    --lastname Suwannarat \
     --role Admin \
-    --email spiderman@superhero.org
+    --email 63606031@kmitl.ac.th

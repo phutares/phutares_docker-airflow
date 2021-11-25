@@ -49,14 +49,14 @@ x-airflow-common:
   environment:
     &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: CeleryExecutor
-    AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
-    AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://airflow:airflow@postgres/airflow
+    AIRFLOW__CORE__SQL_ALCHEMY_CONN: mysql+mysqldb://airflow:airflow@mysql/testdb
+    AIRFLOW__CELERY__RESULT_BACKEND: db+mysql://airflow:airflow@mysql/testdb
     AIRFLOW__CELERY__BROKER_URL: redis://:@redis:6379/0
     AIRFLOW__CORE__FERNET_KEY: ''
     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
     AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
     AIRFLOW__API__AUTH_BACKEND: 'airflow.api.auth.backend.basic_auth'
-    _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:-}
+    _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:- apache-airflow-providers-mysql==2.1.1 pandas beautifulsoup4 sklearn requests DateTime pytz json}
   volumes:
     - ./dags:/opt/airflow/dags
     - ./logs:/opt/airflow/logs
@@ -66,23 +66,35 @@ x-airflow-common:
     &airflow-common-depends-on
     redis:
       condition: service_healthy
-    postgres:
-      condition: service_healthy
+    # postgres:
+    #   condition: service_healthy
 
 services:
-  postgres:
-    image: postgres:13
+  # postgres: # Close for using mysql
+  #   image: postgres:13
+  #   environment:
+  #     POSTGRES_USER: airflow
+  #     POSTGRES_PASSWORD: airflow
+  #     POSTGRES_DB: airflow
+  #   volumes:
+  #     - postgres-db-volume:/var/lib/postgresql/data
+  #   healthcheck:
+  #     test: ["CMD", "pg_isready", "-U", "airflow"]
+  #     interval: 5s
+  #     retries: 5
+  #   restart: always
+
+  mysql:
+    image: mysql/mysql-server:5.7
     environment:
-      POSTGRES_USER: airflow
-      POSTGRES_PASSWORD: airflow
-      POSTGRES_DB: airflow
+      MYSQL_DATABASE: testdb
+      MYSQL_USER: testdb
+      MYSQL_PASSWORD: testdb
+      MYSQL_ROOT_PASSWORD: password
     volumes:
-      - postgres-db-volume:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD", "pg_isready", "-U", "airflow"]
-      interval: 5s
-      retries: 5
-    restart: always
+      - mysql-db-volume:/var/lib/mysql/data
+    ports:
+      - 3306:3306
 
   redis:
     image: redis:latest
@@ -265,18 +277,13 @@ services:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
-  mysql:
-    image: mysql/mysql-server:5.7
-    environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: testdb
-      MYSQL_USER: testdb
-      MYSQL_PASSWORD: testdb
-    ports:
-      - 3306:3306
+
+
+# volumes:
+#   postgres-db-volume:
 
 volumes:
-  postgres-db-volume:
+  mysql-db-volume:
 
 networks:
   backend:
