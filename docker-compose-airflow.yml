@@ -56,7 +56,7 @@ x-airflow-common:
     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
     AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
     AIRFLOW__API__AUTH_BACKEND: 'airflow.api.auth.backend.basic_auth'
-    _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:- apache-airflow-providers-mysql==2.1.1 pandas beautifulsoup4 sklearn requests DateTime pytz json}
+    _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:- apache-airflow-providers-mysql==2.1.1 pandas==0.20.3 beautifulsoup4==4.10.0 sklearn==0.23.2 requests==2.26.0 DateTime==4.3 pytz==2021.1}
   volumes:
     - ./dags:/opt/airflow/dags
     - ./logs:/opt/airflow/logs
