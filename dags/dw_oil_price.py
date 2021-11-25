@@ -13,7 +13,7 @@ import json
 default_args = {
     'owner': 'user',
     'depends_on_past': False,
-    'start_date': datetime(2020, 11, 10),
+    'start_date': datetime(2021, 11, 10),
     'email': ['63606031@kmitl.ac.th'],
     'email_on_failure': True,
     'email_on_retry': True,
@@ -40,7 +40,7 @@ with DAG('dw_oil_price', schedule_interval="@once", default_args=default_args,ta
     def get_data(**kwargs):
         now = datetime.now(pytz.utc)
         allData = []
-        for round in range(2):
+        for round in range(5):
             print("Year:",now.year-round)
             for month in range(1,now.month+1):
                 print("- Month:",month)
