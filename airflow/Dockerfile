@@ -6,7 +6,7 @@ ENV AIRFLOW_HOME=/opt/airflow
 ENV AIRFLOW__CORE__LOAD_EXAMPLES=False
 
 RUN pip3 install apache-airflow==2.2.1 --constraint https://raw.githubusercontent.com/apache/airflow/constraints-2.2.1/constraints-3.8.txt
-RUN pip3 install pandas beautifulsoup4 sklearn requests DateTime pytz json
+RUN pip3 install pandas beautifulsoup4 sklearn requests DateTime pytz
 RUN pip3 install apache-airflow-providers-mysql==2.1.1
 
 

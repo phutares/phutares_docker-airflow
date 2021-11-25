@@ -49,8 +49,8 @@ x-airflow-common:
   environment:
     &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: CeleryExecutor
-    AIRFLOW__CORE__SQL_ALCHEMY_CONN: mysql+mysqldb://airflow:airflow@mysql/testdb
-    AIRFLOW__CELERY__RESULT_BACKEND: db+mysql://airflow:airflow@mysql/testdb
+    AIRFLOW__CORE__SQL_ALCHEMY_CONN: mysql+mysqldb://airflow:airflow@mysql:3306/testdb
+    AIRFLOW__CELERY__RESULT_BACKEND: db+mysql://airflow:airflow@mysql:3306/testdb
     AIRFLOW__CELERY__BROKER_URL: redis://:@redis:6379/0
     AIRFLOW__CORE__FERNET_KEY: ''
     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
@@ -92,7 +92,7 @@ services:
       MYSQL_PASSWORD: airflow
       MYSQL_ROOT_PASSWORD: password
     volumes:
-      - mysql-db-volume:/var/lib/mysql/data
+      - mysql-db-volume:/var/lib/mysql
     ports:
       - 3306:3306
 
