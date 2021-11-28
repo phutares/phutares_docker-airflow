@@ -20,7 +20,7 @@ default_args = {
     'retries': 1,
     'retry_delay': timedelta(seconds=30),
 }
-with DAG('daily_oil_price', schedule_interval="@once", default_args=default_args, tags=['Daily'], catchup=False) as dag:
+with DAG('daily_oil_price', schedule_interval="@daily", default_args=default_args, tags=['Daily'], catchup=False) as dag:
 
     def transformData(allData):
         from dateutil.parser import parse
